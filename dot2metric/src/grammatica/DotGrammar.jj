@@ -1,0 +1,85 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */options{  static = false;}PARSER_BEGIN(DotGrammar)package grammatica;
+
+public class DotGrammar{  public static void main(String args []) throws ParseException  {      System.out.print("dot2metric");  }}PARSER_END(DotGrammar)SKIP :
+{
+  " "
+| "\r"
+| "\t"
+| "\n"
+}
+
+TOKEN : /*OPERANDI CARATTERI-SINGOLI*/
+{
+  < DUE_PUNTI  : ":" >
+| < MAGGIORE : ">" >
+| < UGUALE  : "=" >
+| < VIRGOLA  : "," >
+| < MINORE : "<" >
+| < PUNTO_E_VIRGOLA : ";" >
+| < PARENTESI_QUADRA_APERTA : "[" >
+| < PARENTESI_QUADRA_CHIUSA : "]" >
+| < PARENTESI_GRAFFA_APERTA : "{" >
+| < PARENTESI_GRAFFA_CHIUSA : "}" >
+
+}
+
+TOKEN : /*OPERANDI MULTI-CARATTERI*/
+{
+< ARCO  : "->" >
+| < BACKSLASH : "\"">
+}
+
+TOKEN : /*PAROLE_CHIAVI*/
+{
+< NODE : ("n"|"N")("o"|"O")("d"|"D")("e"|"E") >
+| < EDGE : ("e"|"E")("d"|"D")("g"|"G")("e"|"E")>
+| < DIGRAPH : ("d"|"D")("i"|"I")("g"|"G")("r"|"R")("a"|"A")("p"|"P")("h"|"H") >
+| < GRAPH : ("g"|"G")("r"|"R")("a"|"A")("p"|"P")("h"|"H") >
+| < SUBGRAPH : ("s"|"S")("u"|"U")("b"|"B")("g"|"G")("r"|"R")("a"|"A")("p"|"P")("h"|"H") >
+| < STRICT : ("s"|"S")("t"|"T")("r"|"R")("i"|"I")("c"|"C")("t"|"T") >
+}
+
+TOKEN : /*ATTRIBUTI*/
+{
+  < STYLE : "style" >
+| < COLOR : "color">
+| < FONTSIZE : "fontsize" >
+| < FILLCOLOR : "fillcolor" >
+| < HEIGTH : "height" >
+| < WIDTH : "width" >
+| < URL : "URL" >
+| < LABEL : "label" >
+| < SHAPE : "shape" >
+| < FONTNAME  : "fontname" >
+| < FONTCOLOR  : "fontcolor" >
+| < LABELFONTSIZE : "labelfontsize" >
+| < LABELFONTNAME : "labelfontname">
+| < BGCOLOR : "bgcolor">
+| < PENCOLOR : "pencolor">
+}
+
+TOKEN : /*NUMERI*/
+{
+ < #DIGITS : (< DIGIT >)+ >
+| < #DIGIT : [ "0"-"9" ] >
+}
+
+TOKEN : /*LETTERALI*/
+{
+ < #LETTER : (["a"-"z", "A"-"Z", "_"]) >
+| < #ESCAPED_QUOTES : ("\\")("\"") >
+}
+
+TOKEN : /*ID = STRING | NUMERAL | DOUBLE_QUOTED_STRING | HTML_STRING */
+{
+ < ID :  (("-")?((".")< DIGITS >| < DIGITS >("."((< DIGIT >)*))))								/* NUMERICO */
+| (< LETTER >(< LETTER >|< DIGIT >)*)															/* STRINGA */
+| (< BACKSLASH >(~[" ","\r","\t","\n","\""]|(< ESCAPED_QUOTES >))*< BACKSLASH >)				/* DOUBLE_QUOTED_STRING*/
+| (< MAGGIORE >(~[" ","\r","\t","\n"])* < MINORE >)>											/* STRINGA_HTML */
+}
+
+
+
+
