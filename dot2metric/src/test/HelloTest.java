@@ -21,7 +21,7 @@ public class HelloTest {
 		ArrayList<String> lista_metodi_chiamati = new ArrayList<>();
 		FileInputStream fis = new FileInputStream(new File(Costanti.PATH_DIRECTORY_INPUT+"/"+Costanti.PATH_FILE_INPUT));
 		DotGrammar dot = new DotGrammar(fis);
-		System.out.println("NOME METODO : " + dot.test());
+		System.out.println("NOME METODO : " + dot.start());
 		
 		
 //		Token token = null;
@@ -38,6 +38,9 @@ public class HelloTest {
 //			System.out.println("\n\n ******************************** FILE: " + nome_file + "************************************************ \n\n");
 //			FileInputStream fis = new FileInputStream(new File(Costanti.PATH_DIRECTORY_INPUT+"/"+nome_file));
 //			DotGrammar dot = new DotGrammar(fis);
+//			System.out.println("\n\nNOME METODO : " + dot.start());
+//			System.out.println("************************************************************************************************************************************************************************************************************************************************");
+			
 //			Token token = null;
 //			do{
 //				token = dot.getNextToken();

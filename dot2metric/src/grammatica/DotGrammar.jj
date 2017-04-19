@@ -1,10 +1,7 @@
 /**
  * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
  */options{  static = false;}PARSER_BEGIN(DotGrammar)package grammatica;
-import java.util.ArrayList;
 public class DotGrammar{
-  public String nome_metodo="";
- // public ArrayList<String> lista_metodi_chiamati = new ArrayList<>();
     public static void main(String args []) throws ParseException  {      System.out.print("dot2metric");  }}PARSER_END(DotGrammar)SKIP :
 {
   " "
@@ -13,11 +10,7 @@ public class DotGrammar{
 | "\n"
 }
 
-SKIP: {
-"rankdir": SALTA
-}
 
-< SALTA >
 
 
 TOKEN : /*OPERANDI CARATTERI-SINGOLI*/
@@ -49,6 +42,7 @@ TOKEN : /*PAROLE_CHIAVI*/
 | < GRAPH : ("g"|"G")("r"|"R")("a"|"A")("p"|"P")("h"|"H") >
 | < SUBGRAPH : ("s"|"S")("u"|"U")("b"|"B")("g"|"G")("r"|"R")("a"|"A")("p"|"P")("h"|"H") >
 | < STRICT : ("s"|"S")("t"|"T")("r"|"R")("i"|"I")("c"|"C")("t"|"T") >
+| < RANKDIR : ("r"|"R")("a"|"A")("n"|"N")("k"|"K")("d"|"D")("i"|"I")("r"|"R") >
 }
 
 TOKEN : /*ATTRIBUTI*/
@@ -57,7 +51,7 @@ TOKEN : /*ATTRIBUTI*/
 | < COLOR : "color">
 | < FONTSIZE : "fontsize" >
 | < FILLCOLOR : "fillcolor" >
-| < HEIGTH : "height" >
+| < HEIGHT : "height" >
 | < WIDTH : "width" >
 | < URL : "URL" >
 | < LABEL : "label" >
@@ -78,7 +72,7 @@ TOKEN : /*NUMERI*/
 
 TOKEN : /*LETTERALI*/
 {
- < LETTER : (["a"-"z", "A"-"Z", "_"]) >
+ < #LETTER : (["a"-"z", "A"-"Z", "_"]) >
 | < #ESCAPED_QUOTES : ("\\")("\"") >
 }
 
@@ -90,19 +84,27 @@ TOKEN : /*ID = STRING | NUMERAL | DOUBLE_QUOTED_STRING | HTML_STRING */
 | (< MAGGIORE >(~[" ","\r","\t","\n"])* < MINORE >)>											/* STRINGA_HTML */
 }
 
-String test():
+
+
+
+String start():
 {
   Token t1,t2;
+  String nome_metodo;
   }
 {
-	<DIGRAPH> t1 =  <ID>
-	{
-	  	nome_metodo= t1.image;
-   		System.out.println("package: " + t1.image);
-  	}
 
-	[  test2()  |  test3()  ]
+ 	
+	nome_metodo= getNomeMetodo()
 
+	< PARENTESI_GRAFFA_APERTA > { System.out.println("INCONTRATA PARENTESI GRAFFA APERTA");}
+
+	skip_intestazione()
+
+	gestioneNodi()
+	
+
+	< PARENTESI_GRAFFA_CHIUSA > { System.out.println("INCONTRATA PARENTESI GRAFFA CHIUSA");}
  	
   	{return nome_metodo; }
 
@@ -110,20 +112,81 @@ String test():
   
 }
 
-void test2(): { } {
-  
-	<NODE > { System.out.println("NODO");}
+String getNomeMetodo():
+{
+  Token t;
+  String nome_metodo;
+  }
+{
+	<DIGRAPH> t =  <ID>
+	{
+	  	nome_metodo= t.image;
+   		System.out.println("package: " + t.image);
+  	}
+ 	
+  	{return nome_metodo; }
 
+  	
+  
 }
 
-void test3(): { } {
+void skip_intestazione(): {
+  Token t;
+  } {
   
-	< PARENTESI_GRAFFA_APERTA > { System.out.println("PARENTESI GRAFFA");}
+	
+	(	  ( < EDGE > | < NODE > ) < PARENTESI_QUADRA_APERTA >
+		
+		( ( < FONTNAME > | < FONTSIZE > | < LABELFONTNAME > | < LABELFONTSIZE > | < SHAPE > ) < UGUALE > < ID > (< VIRGOLA >)*)*
+
+		< PARENTESI_QUADRA_CHIUSA > < PUNTO_E_VIRGOLA >
+	)* 
 
 	
 
-	< NODE >
-
+	< RANKDIR > < UGUALE > < ID > < PUNTO_E_VIRGOLA >
+	
 }
 
+void gestioneNodi(): {
+  Token t;
+  } {
+    	   (	     t = < ID > { System.out.println(t.image);} (dichiarazioneNodo() | dichiarazioneArco())
+	     )*
+
+     }
+
+void dichiarazioneNodo(): {
+  Token t;
+  } {
+
+	
+	  
+	 <PARENTESI_QUADRA_APERTA >	
+		(
+		 (			( < HEIGHT > | < WIDTH > | < COLOR > | < FILLCOLOR > | < STYLE > | < FONTCOLOR > | < URL > )
+		 	< UGUALE > < ID > (< VIRGOLA >)*
+		 )|(
+			< LABEL > 
+		 	< UGUALE > t = < ID > { System.out.println(t.image);} (< VIRGOLA >)*
+		   )
+		)*
+	< PARENTESI_QUADRA_CHIUSA > < PUNTO_E_VIRGOLA >
+
+     }
+
+ void dichiarazioneArco(): {
+  Token t;
+  } {
+
+	
+	  
+	 < ARCO > t = < ID > { System.out.println(t.image);}
+		<PARENTESI_QUADRA_APERTA > (
+									 ( < COLOR > | < FONTSIZE > | < STYLE > | < FONTNAME > )
+									 < UGUALE > < ID > (< VIRGOLA >)*
+									)*
+		< PARENTESI_QUADRA_CHIUSA > < PUNTO_E_VIRGOLA >
+
+     }
 
