@@ -1,8 +1,20 @@
 /**
  * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
  */options{  static = false;}PARSER_BEGIN(DotGrammar)package grammatica;
+import utility.*;
 public class DotGrammar{
-    public static void main(String args []) throws ParseException  {      System.out.print("dot2metric");  }}PARSER_END(DotGrammar)SKIP :
+  public ObjMetodo metodo;
+  public TabellaSimboli tab_simboli;
+    public ObjMetodo start() throws ParseException {
+    metodo = new ObjMetodo("");
+    tab_simboli = new TabellaSimboli();
+    
+    init();
+
+    metodo.setSimboli(tab_simboli);
+    return metodo;}
+
+}PARSER_END(DotGrammar)SKIP :
 {
   " "
 | "\r"
@@ -62,6 +74,7 @@ TOKEN : /*ATTRIBUTI*/
 | < LABELFONTNAME : "labelfontname">
 | < BGCOLOR : "bgcolor">
 | < PENCOLOR : "pencolor">
+| < DIR : "dir">
 }
 
 TOKEN : /*NUMERI*/
@@ -87,27 +100,26 @@ TOKEN : /*ID = STRING | NUMERAL | DOUBLE_QUOTED_STRING | HTML_STRING */
 
 
 
-String start():
+void init():
 {
   Token t1,t2;
-  String nome_metodo;
   }
 {
 
+	{ System.out.println("INIZIO GRAMMATICA");}
  	
-	nome_metodo= getNomeMetodo()
+	{ metodo.setNome(getNomeMetodo()); }
 
-	< PARENTESI_GRAFFA_APERTA > { System.out.println("INCONTRATA PARENTESI GRAFFA APERTA");}
+	< PARENTESI_GRAFFA_APERTA > 
 
 	skip_intestazione()
 
 	gestioneNodi()
 	
 
-	< PARENTESI_GRAFFA_CHIUSA > { System.out.println("INCONTRATA PARENTESI GRAFFA CHIUSA");}
+	< PARENTESI_GRAFFA_CHIUSA > 
  	
-  	{return nome_metodo; }
-
+	{ System.out.println("FINE GRAMMATICA");}
   	
   
 }
@@ -121,7 +133,6 @@ String getNomeMetodo():
 	<DIGRAPH> t =  <ID>
 	{
 	  	nome_metodo= t.image;
-   		System.out.println("package: " + t.image);
   	}
  	
   	{return nome_metodo; }
@@ -144,19 +155,19 @@ void skip_intestazione(): {
 
 	
 
-	< RANKDIR > < UGUALE > < ID > < PUNTO_E_VIRGOLA >
+	(	  < RANKDIR > < UGUALE > < ID > < PUNTO_E_VIRGOLA >)*
 	
 }
 
 void gestioneNodi(): {
   Token t;
   } {
-    	   (	     t = < ID > { System.out.println(t.image);} (dichiarazioneNodo() | dichiarazioneArco())
+    	   (	     t = < ID >  (dichiarazioneNodo(t) | dichiarazioneArco(t))
 	     )*
 
      }
 
-void dichiarazioneNodo(): {
+void dichiarazioneNodo(Token id): {
   Token t;
   } {
 
@@ -164,26 +175,30 @@ void dichiarazioneNodo(): {
 	  
 	 <PARENTESI_QUADRA_APERTA >	
 		(
-		 (			( < HEIGHT > | < WIDTH > | < COLOR > | < FILLCOLOR > | < STYLE > | < FONTCOLOR > | < URL > )
+		 (			( < HEIGHT > | < WIDTH > | < COLOR > | < FILLCOLOR > | < STYLE > | < FONTCOLOR > | < URL > | < DIR > )
 		 	< UGUALE > < ID > (< VIRGOLA >)*
 		 )|(
 			< LABEL > 
-		 	< UGUALE > t = < ID > { System.out.println(t.image);} (< VIRGOLA >)*
+		 	< UGUALE > t = < ID > { tab_simboli.addSimbolo(id.image, t.image);} (< VIRGOLA >)*
 		   )
 		)*
 	< PARENTESI_QUADRA_CHIUSA > < PUNTO_E_VIRGOLA >
 
      }
 
- void dichiarazioneArco(): {
+ void dichiarazioneArco(Token id): {
   Token t;
   } {
 
 	
 	  
-	 < ARCO > t = < ID > { System.out.println(t.image);}
+	 < ARCO > t = < ID > {
+	   						if(!tab_simboli.isId(id.image))
+	   							tab_simboli.addSimbolo(id.image);
+							metodo.addElement(id.image, t.image);
+	   							}
 		<PARENTESI_QUADRA_APERTA > (
-									 ( < COLOR > | < FONTSIZE > | < STYLE > | < FONTNAME > )
+									 ( < COLOR > | < FONTSIZE > | < STYLE > | < FONTNAME >  | < DIR > | < LABEL > )
 									 < UGUALE > < ID > (< VIRGOLA >)*
 									)*
 		< PARENTESI_QUADRA_CHIUSA > < PUNTO_E_VIRGOLA >
