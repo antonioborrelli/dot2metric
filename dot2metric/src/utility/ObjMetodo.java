@@ -97,7 +97,7 @@ public class ObjMetodo {
 		this.simboli = simboli;
 	}
 
-	public Tree getTree(){
+	public Tree<String,String> getTree(){
 		Tree<String,String> albero = new Tree<String,String>();
 		Node<String,String> radice = albero.insert(null, this.getNomeEsteso());
 		if(this.mappaChiamate.get(this.getNomeEsteso())!=null){
@@ -140,6 +140,12 @@ public class ObjMetodo {
 				else
 					p.println("\t"+chiamato+"[INDIRETTA]");
 		}
+	}
+	
+	public void printChiamateDirette(PrintStream p){
+		if(this.nome_esteso != "" && this.mappaChiamate!=null && this.mappaChiamate.containsKey(this.nome_esteso))
+			for(String chiamato : this.mappaChiamate.get(this.nome_esteso))
+				p.println(this.nome_esteso + " --> " + chiamato);
 	}
 	
 	public int getChiamateDirette(){
