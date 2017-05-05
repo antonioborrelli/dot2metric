@@ -3,8 +3,12 @@ package costanti;
 public abstract class Costanti {
 
 	//PATH DIRECTORY
-	public static String PATH_DIRECTORY_INPUT	="input";
-//	public static String PATH_DIRECTORY_INPUT	="html";
+//	public static String PATH_DIRECTORY_INPUT	="doxygenDOT2METRIC/html";
+	
+//	public static String PATH_DIRECTORY_INPUT	="input";
+//	public static String PATH_DIRECTORY_INPUT	="input__";
+	public static String PATH_DIRECTORY_INPUT	="OSS/html";
+//	public static String PATH_DIRECTORY_INPUT	="jedit/html";
 	public static String PATH_DIRECTORY_OUTPUT	="output";
 		
 	//PATH FILE
@@ -21,4 +25,9 @@ public abstract class Costanti {
 
 	
 	public static String DIRECTORY_INPUT_MODIFICATI	="input_mod";
+	public static String FILE_OUTPUT="output.metric"; //file contenente albero finale
+	public static String FILE_OUTPUT_CHIAMATE="chiamate.metric"; //file contenente tutte le chiamate dirette e indirette per singolo metodo
+	public static String FILE_OUTPUT_TREES="trees.metric"; //file contenente tutti gli alberi per singoli metodi
+	public static String FILE_OUTPUT_REPORT="report.metric"; //file contenente tutti gli alberi per singoli metodi
+	
 }

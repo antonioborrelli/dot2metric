@@ -12,32 +12,43 @@ public class DotGrammar implements DotGrammarConstants {
     init();
 
     metodo.setSimboli(tab_simboli);
+    metodo.inserisciMappaChiamate();
     return metodo;
 }
 
   final public void init() throws ParseException {
-  Token t1,t2;
-          System.out.println("INIZIO GRAMMATICA");
-          metodo.setNome(getNomeMetodo());
-    jj_consume_token(PARENTESI_GRAFFA_APERTA);
-    skip_intestazione();
-    gestioneNodi();
-    jj_consume_token(PARENTESI_GRAFFA_CHIUSA);
-          System.out.println("FINE GRAMMATICA");
+          metodo.setNomeEsteso(getNomeMetodo());
+    jj_consume_token(0);
   }
 
   final public String getNomeMetodo() throws ParseException {
   Token t;
   String nome_metodo;
-    jj_consume_token(DIGRAPH);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case DIGRAPH:
+      jj_consume_token(DIGRAPH);
+      break;
+    case GRAPH:
+      jj_consume_token(GRAPH);
+      break;
+    case SUBGRAPH:
+      jj_consume_token(SUBGRAPH);
+      break;
+    default:
+      jj_la1[0] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
     t = jj_consume_token(ID);
-                nome_metodo= t.image;
+                                                        nome_metodo= t.image;
+    jj_consume_token(PARENTESI_GRAFFA_APERTA);
+    skip_intestazione();
+    jj_consume_token(PARENTESI_GRAFFA_CHIUSA);
          {if (true) return nome_metodo;}
     throw new Error("Missing return statement in function");
   }
 
   final public void skip_intestazione() throws ParseException {
-  Token t;
     label_1:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -46,7 +57,7 @@ public class DotGrammar implements DotGrammarConstants {
         ;
         break;
       default:
-        jj_la1[0] = jj_gen;
+        jj_la1[1] = jj_gen;
         break label_1;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -57,7 +68,7 @@ public class DotGrammar implements DotGrammarConstants {
         jj_consume_token(NODE);
         break;
       default:
-        jj_la1[1] = jj_gen;
+        jj_la1[2] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -73,7 +84,7 @@ public class DotGrammar implements DotGrammarConstants {
           ;
           break;
         default:
-          jj_la1[2] = jj_gen;
+          jj_la1[3] = jj_gen;
           break label_2;
         }
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -93,7 +104,7 @@ public class DotGrammar implements DotGrammarConstants {
           jj_consume_token(SHAPE);
           break;
         default:
-          jj_la1[3] = jj_gen;
+          jj_la1[4] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -106,7 +117,7 @@ public class DotGrammar implements DotGrammarConstants {
             ;
             break;
           default:
-            jj_la1[4] = jj_gen;
+            jj_la1[5] = jj_gen;
             break label_3;
           }
           jj_consume_token(VIRGOLA);
@@ -122,7 +133,7 @@ public class DotGrammar implements DotGrammarConstants {
         ;
         break;
       default:
-        jj_la1[5] = jj_gen;
+        jj_la1[6] = jj_gen;
         break label_4;
       }
       jj_consume_token(RANKDIR);
@@ -130,6 +141,7 @@ public class DotGrammar implements DotGrammarConstants {
       jj_consume_token(ID);
       jj_consume_token(PUNTO_E_VIRGOLA);
     }
+    gestioneNodi();
   }
 
   final public void gestioneNodi() throws ParseException {
@@ -141,7 +153,7 @@ public class DotGrammar implements DotGrammarConstants {
         ;
         break;
       default:
-        jj_la1[6] = jj_gen;
+        jj_la1[7] = jj_gen;
         break label_5;
       }
       t = jj_consume_token(ID);
@@ -153,7 +165,7 @@ public class DotGrammar implements DotGrammarConstants {
         dichiarazioneArco(t);
         break;
       default:
-        jj_la1[7] = jj_gen;
+        jj_la1[8] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -175,10 +187,11 @@ public class DotGrammar implements DotGrammarConstants {
       case LABEL:
       case FONTCOLOR:
       case DIR:
+      case TOOLTIP:
         ;
         break;
       default:
-        jj_la1[8] = jj_gen;
+        jj_la1[9] = jj_gen;
         break label_6;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -190,6 +203,7 @@ public class DotGrammar implements DotGrammarConstants {
       case URL:
       case FONTCOLOR:
       case DIR:
+      case TOOLTIP:
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case HEIGHT:
           jj_consume_token(HEIGHT);
@@ -215,8 +229,11 @@ public class DotGrammar implements DotGrammarConstants {
         case DIR:
           jj_consume_token(DIR);
           break;
+        case TOOLTIP:
+          jj_consume_token(TOOLTIP);
+          break;
         default:
-          jj_la1[9] = jj_gen;
+          jj_la1[10] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -229,7 +246,7 @@ public class DotGrammar implements DotGrammarConstants {
             ;
             break;
           default:
-            jj_la1[10] = jj_gen;
+            jj_la1[11] = jj_gen;
             break label_7;
           }
           jj_consume_token(VIRGOLA);
@@ -239,7 +256,7 @@ public class DotGrammar implements DotGrammarConstants {
         jj_consume_token(LABEL);
         jj_consume_token(UGUALE);
         t = jj_consume_token(ID);
-                                                tab_simboli.addSimbolo(id.image, t.image);
+                                                           tab_simboli.addSimbolo(id.image, t.image);
         label_8:
         while (true) {
           switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -247,14 +264,14 @@ public class DotGrammar implements DotGrammarConstants {
             ;
             break;
           default:
-            jj_la1[11] = jj_gen;
+            jj_la1[12] = jj_gen;
             break label_8;
           }
           jj_consume_token(VIRGOLA);
         }
         break;
       default:
-        jj_la1[12] = jj_gen;
+        jj_la1[13] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -267,9 +284,10 @@ public class DotGrammar implements DotGrammarConstants {
   Token t;
     jj_consume_token(ARCO);
     t = jj_consume_token(ID);
-                                                        if(!tab_simboli.isId(id.image))
-                                                                tab_simboli.addSimbolo(id.image);
-                                                        metodo.addElement(id.image, t.image);
+                          if(!tab_simboli.isId(id.image))
+                                                        tab_simboli.addSimbolo(id.image);
+
+                                                metodo.addElement(id.image, t.image);
     jj_consume_token(PARENTESI_QUADRA_APERTA);
     label_9:
     while (true) {
@@ -283,7 +301,7 @@ public class DotGrammar implements DotGrammarConstants {
         ;
         break;
       default:
-        jj_la1[13] = jj_gen;
+        jj_la1[14] = jj_gen;
         break label_9;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -306,7 +324,7 @@ public class DotGrammar implements DotGrammarConstants {
         jj_consume_token(LABEL);
         break;
       default:
-        jj_la1[14] = jj_gen;
+        jj_la1[15] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -319,7 +337,7 @@ public class DotGrammar implements DotGrammarConstants {
           ;
           break;
         default:
-          jj_la1[15] = jj_gen;
+          jj_la1[16] = jj_gen;
           break label_10;
         }
         jj_consume_token(VIRGOLA);
@@ -338,7 +356,7 @@ public class DotGrammar implements DotGrammarConstants {
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[16];
+  final private int[] jj_la1 = new int[17];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -346,10 +364,10 @@ public class DotGrammar implements DotGrammarConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x60000,0x60000,0x4000000,0x4000000,0x100,0x800000,0x0,0x8800,0xfb000000,0x7b000000,0x100,0x100,0xfb000000,0x87000000,0x87000000,0x100,};
+      jj_la1_0 = new int[] {0x380000,0x60000,0x60000,0x4000000,0x4000000,0x100,0x800000,0x0,0x8800,0xfb000000,0x7b000000,0x100,0x100,0xfb000000,0x87000000,0x87000000,0x100,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x1b,0x1b,0x0,0x0,0x1000,0x0,0x84,0x84,0x0,0x0,0x84,0x82,0x82,0x0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x1b,0x1b,0x0,0x0,0x2000,0x0,0x184,0x184,0x0,0x0,0x184,0x82,0x82,0x0,};
    }
 
   /** Constructor with InputStream. */
@@ -363,7 +381,7 @@ public class DotGrammar implements DotGrammarConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 16; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 17; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -377,7 +395,7 @@ public class DotGrammar implements DotGrammarConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 16; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 17; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -387,7 +405,7 @@ public class DotGrammar implements DotGrammarConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 16; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 17; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -397,7 +415,7 @@ public class DotGrammar implements DotGrammarConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 16; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 17; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -406,7 +424,7 @@ public class DotGrammar implements DotGrammarConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 16; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 17; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -415,7 +433,7 @@ public class DotGrammar implements DotGrammarConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 16; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 17; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -466,12 +484,12 @@ public class DotGrammar implements DotGrammarConstants {
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[45];
+    boolean[] la1tokens = new boolean[46];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < 17; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -483,7 +501,7 @@ public class DotGrammar implements DotGrammarConstants {
         }
       }
     }
-    for (int i = 0; i < 45; i++) {
+    for (int i = 0; i < 46; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

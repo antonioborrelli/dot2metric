@@ -25,6 +25,13 @@ public class TabellaSimboli {
 		return this.tabella.containsKey(id);
 	}
 	
+	public boolean isChiamato(String nome){
+		for(String s : tabella.keySet())
+			if(!s.equals("Node1") && nome.equals(tabella.get(s)))
+				return true;
+		return false;
+	}
+	
 	public void print(){
 		for (String id : this.tabella.keySet()) {
 			System.out.println(id + " : " + this.tabella.get(id));
